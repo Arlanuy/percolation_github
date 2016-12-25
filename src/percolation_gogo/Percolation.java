@@ -1,5 +1,3 @@
-import edu.princeton.cs.algs4.StdRandom;
-import edu.princeton.cs.algs4.StdStats;
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 import java.util.Arrays;
@@ -121,10 +119,7 @@ public class Percolation {
 		return false;
 	}             // does the system percolate?
 	
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		StdOut.print("What is the value for n: ");
-		int N = StdIn.readInt();
+	public void init(int N) {
 		 rows_array = new int[1];
 		 columns_array = new  int[1];
 		 int i = 1;
@@ -139,7 +134,7 @@ public class Percolation {
 			 i++;
 		 }
 		 Percolation perc = new Percolation(N);
-		 //PercolationVisualizer pv = new PercolationVisualizer(perc, N); 
+		 PercolationVisualizer.draw(perc, N);
 	}
 
 }
