@@ -16,6 +16,7 @@ public class Percolation {
 	final boolean CLOSE = false;
 	int top_node;
 	int bottom_node;
+	int num_open_sites = 0;
 	
 	public Percolation(int n) {
 		this.n = n;
@@ -36,6 +37,9 @@ public class Percolation {
 		
 	}  // create n-by-n grid, with all sites blocked
 	
+	public int getNumOpenSites() {
+		return num_open_sites;
+	}
 	
 	private void initNSquare() {
 		for (int i = 0; i < n; i++) {
@@ -71,26 +75,31 @@ public class Percolation {
 			n_square[row][col] = OPEN;
 			if (row == 0) {
 				wquf.union(xyTo1D(row, col), top_node);
+				num_open_sites++;
 			}
 			
 			if (((row - 1) >= 0) && (n_square[row-1][col] == OPEN) &&
 			(wquf.connected(xyTo1D(row, col), xyTo1D((row - 1), col)) == false)) {
 				wquf.union(xyTo1D(row, col), xyTo1D(row - 1, col));
+				num_open_sites++;
 			}
 			
 			else if (((row + 1) < n) && (n_square[row+1][col] == OPEN) &&
 				(wquf.connected(xyTo1D(row, col), xyTo1D((row + 1), col)) == false)) {
 					wquf.union(xyTo1D(row,col), xyTo1D(row + 1, col));
+					num_open_sites++;
 			}
 			
 			if (((col - 1) >= 0) && (n_square[row][col - 1] == OPEN) &&
 				(wquf.connected(xyTo1D(row, col), xyTo1D(row, col - 1)) == false)) {
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col - 1));
+					num_open_sites++;
 			}
 				
 			else if (((col + 1) < n) && (n_square[row][col + 1] == OPEN) &&
 				(wquf.connected(xyTo1D(row, col), xyTo1D(row, col + 1)) == false)) {
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col + 1));
+					num_open_sites++;
 			}
 		}
 	
