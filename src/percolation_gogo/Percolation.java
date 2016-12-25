@@ -29,12 +29,12 @@ public class Percolation {
 		n_square = new boolean[n][n];
 		wquf = new WeightedQuickUnionUF((n * n) + 2);
 		initNSquare();
+		/**
 		int i = 0;
 		for (int num: rows_array) {
 			open(rows_array[i], columns_array[i]);
 			i++;
-		}
-		StdOut.println("The system percolates: " + percolates());
+		}*/
 		
 	}  // create n-by-n grid, with all sites blocked
 	
@@ -94,6 +94,10 @@ public class Percolation {
 				(wquf.connected(xyTo1D(row, col), xyTo1D(row, col + 1)) == false)) {
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col + 1));
 			}
+			if (percolates()) {
+				StdOut.println("The system percolates: ");
+			}
+				
 		}
 	
 	}       // open site (row, col) if it is not open already 
@@ -120,8 +124,8 @@ public class Percolation {
 		}
 		return false;
 	}             // does the system percolate?
-	
-	public static void main(String[] args) {
+	/**
+	public void init(String[] args) {
 		// TODO Auto-generated method stub
 		StdOut.print("What is the value for n: ");
 		int N = StdIn.readInt();
@@ -140,6 +144,6 @@ public class Percolation {
 		 }
 		 Percolation perc = new Percolation(N);
 		 //PercolationVisualizer pv = new PercolationVisualizer(perc, N); 
-	}
+	}*/
 
 }
