@@ -31,7 +31,6 @@ public class Percolation {
 		initNSquare();
 		int i = 0;
 		for (int num: rows_array) {
-			StdOut.println("row: " + rows_array[i] + " col: " + columns_array[i]);
 			open(rows_array[i], columns_array[i]);
 			i++;
 		}
@@ -53,7 +52,6 @@ public class Percolation {
 	
 	private boolean checkValidIndex(int row, int col) {
 		if ((row > n || col > n)|| (row < 1 || col < 1)) {					
-			StdOut.println("Never be a chicken");
 			return false;
 		}
 		return true;
@@ -73,7 +71,6 @@ public class Percolation {
 			row--;
 			col--;
 			n_square[row][col] = OPEN;
-			StdOut.println("new row " + row + " new col " + col + "Opened babyboy " + xyTo1D(row, col));
 			if (row == 0) {
 				wquf.union(xyTo1D(row, col), top_node);
 			}
@@ -81,31 +78,21 @@ public class Percolation {
 			if (((row - 1) >= 0) && (n_square[row-1][col] == OPEN) &&
 			(wquf.connected(xyTo1D(row, col), xyTo1D((row - 1), col)) == false)) {
 				wquf.union(xyTo1D(row, col), xyTo1D(row - 1, col));
-				StdOut.println("Entered 1st if");
 			}
 			
 			else if (((row + 1) < n) && (n_square[row+1][col] == OPEN) &&
 				(wquf.connected(xyTo1D(row, col), xyTo1D((row + 1), col)) == false)) {
 					wquf.union(xyTo1D(row,col), xyTo1D(row + 1, col));
-					StdOut.println("Entered 2nd if");
-			}
-			
-			else if (((row + 1) < n)){
-				StdOut.println("in2d: " + (n_square[row+1][col] == OPEN) + 
-						" connected: " + (wquf.connected(xyTo1D(row, col), xyTo1D((row + 1), col)) == false));
-			
 			}
 			
 			if (((col - 1) >= 0) && (n_square[row][col - 1] == OPEN) &&
 				(wquf.connected(xyTo1D(row, col), xyTo1D(row, col - 1)) == false)) {
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col - 1));
-					StdOut.println("Entered 3rd if");
 			}
 				
 			else if (((col + 1) < n) && (n_square[row][col + 1] == OPEN) &&
 				(wquf.connected(xyTo1D(row, col), xyTo1D(row, col + 1)) == false)) {
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col + 1));
-					StdOut.println("Entered 4th if");
 			}
 		}
 	
@@ -151,8 +138,8 @@ public class Percolation {
 			 columns_array[i - 1] = q;
 			 i++;
 		 }
-		 StdOut.println("Entered constructor");
 		 Percolation perc = new Percolation(N);
+		 //PercolationVisualizer pv = new PercolationVisualizer(perc, N); 
 	}
 
 }
