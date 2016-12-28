@@ -8,15 +8,13 @@ import edu.princeton.cs.algs4.StdOut;
 
 public class Percolation {
 	boolean[][] n_square;
-	static int[] rows_array;
-	static int[] columns_array;
 	int n;	
-	static WeightedQuickUnionUF wquf;
+	WeightedQuickUnionUF wquf;
 	final boolean OPEN = true;
 	final boolean CLOSE = false;
 	int top_node;
 	int bottom_node;
-	int num_open_sites = 0;
+	double num_open_sites = 0;
 	
 	public Percolation(int n) {
 		this.n = n;
@@ -28,16 +26,9 @@ public class Percolation {
 		n_square = new boolean[n][n];
 		wquf = new WeightedQuickUnionUF((n * n) + 2);
 		initNSquare();
-		int i = 0;
-		for (int num: rows_array) {
-			open(rows_array[i], columns_array[i]);
-			i++;
-		}
-		StdOut.println("The system percolates: " + percolates());
-		
 	}  // create n-by-n grid, with all sites blocked
 	
-	public int getNumOpenSites() {
+	public double getNumOpenSites() {
 		return num_open_sites;
 	}
 	
@@ -127,23 +118,5 @@ public class Percolation {
 		}
 		return false;
 	}             // does the system percolate?
-	
-	public void init(int N) {
-		 rows_array = new int[1];
-		 columns_array = new  int[1];
-		 int i = 1;
-		 while (!StdIn.isEmpty())
-		 {
-			 rows_array = Arrays.copyOf(rows_array, i);
-			 columns_array = Arrays.copyOf(columns_array, i);
-			 int p = StdIn.readInt();
-			 int q = StdIn.readInt();
-			 rows_array[i - 1] = p;
-			 columns_array[i - 1] = q;
-			 i++;
-		 }
-		 Percolation perc = new Percolation(N);
-		 PercolationVisualizer.draw(perc, N);
-	}
 
 }

@@ -5,7 +5,8 @@ import edu.princeton.cs.algs4.StdOut;
 public class   PercolationStats{
 	int n;
 	int trials;
-	double mean;
+	double mean, s_dev;
+	double[] a;
 	
 	Percolation p;
 	
@@ -16,47 +17,60 @@ public class   PercolationStats{
 		p = new Percolation(n);
 		StdRandom.setSeed(4);
 		StdOut.println("The seed is " + StdRandom.getSeed());
-
-		
+	   StdOut.println("mean is " + mean());
+	   StdOut.println("stddev is " + stddev());
+	   StdOut.println("confidence lo is " + confidenceLo());
+	   StdOut.println("confidence hi is " + confidenceHi());
 	}
 	
-	private int percTresh() {
+	private double percTresh() {
 		while (!p.percolates()) {
-			int random_num = StdRandom.uniform(n*n);
-			int random_num2 = StdRandom.uniform(n*n);
-			StdOut.println(" and the rd is " + random_num + " " + random_num2);
-			p.open(random_num, random_num2);			
+			int random_num = StdRandom.uniform(n) + 1; //+ 1 because this could return zero
+			int random_num2 = StdRandom.uniform(n) + 1;
+			//StdOut.println(" and the rd is " + random_num + " " + random_num2);
+			p.open(random_num, random_num2);
+			//PercolationVisualizer.draw(p, n);
 		}
-		return p.getNumOpenSites();
+		StdOut.println("Num of opened sites is " + p.getNumOpenSites());
+		double open_sites = p.getNumOpenSites();
+		p = new Percolation(n);
+		return open_sites;
 	}
 	
 	public double mean()                          // sample mean of percolation threshold
 	{
-		int[] a = new int[n];
+		a = new double[trials];
 		for (int i = 0; i < trials; i++) {
-			a[i] = percTresh();
+			a[i] = percTresh()/(n*n);
 		}
 		mean = StdStats.mean(a);
 		StdOut.println("mean is " + mean);
 		return mean;
 		
 	}
-	/**
+	
 	public double stddev()                        // sample standard deviation of percolation threshold
 	{
-		
+		s_dev = StdStats.stddev(a);
+		return s_dev;
 	}
 	
 	public double confidenceLo()                  // low  endpoint of 95% confidence interval
 	{
-		
+		double S_error = s_dev/Math.sqrt(trials);
+		double M_error = S_error * 2;
+		double C_interval = mean - M_error;
+		return C_interval;
 	}
 	
 	public double confidenceHi()                  // high endpoint of 95% confidence interval
 	{
-		
+		double S_error = s_dev/Math.sqrt(trials);
+		double M_error = S_error * 2;
+		double C_interval = mean + M_error;
+		return C_interval;
 	}
-	*/
+	
    public static void main(String[] args)        // test client (described below)
    {
 	   int N = Integer.parseInt(args[0]);

@@ -6,7 +6,7 @@ import edu.princeton.cs.algs4.StdDraw;
 public class PercolationVisualizer {
 
     // delay in miliseconds (controls animation speed)
-    private static final int DELAY = 100;
+    private static final int DELAY = 20;
 
     // draw n-by-n percolation system
     public static void draw(Percolation perc, int n) {
@@ -41,6 +41,12 @@ public class PercolationVisualizer {
         if (perc.percolates()) StdDraw.text(0.75*n, -0.025*n, "percolates");
         else                   StdDraw.text(0.75*n, -0.025*n, "does not percolate");
 
+    }
+    
+    public static void drawSite(Percolation perc, int n) {
+        draw(perc, n);
+        StdDraw.show();
+        StdDraw.pause(DELAY);
     }
 
     public static void main(String[] args) {
