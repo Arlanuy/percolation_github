@@ -1,20 +1,15 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
-import java.util.Arrays;
-
-import edu.princeton.cs.algs4.StdIn;
-import edu.princeton.cs.algs4.StdOut;
-
 
 public class Percolation {
-	boolean[][] n_square;
-	int n;	
-	WeightedQuickUnionUF wquf;
-	final boolean OPEN = true;
-	final boolean CLOSE = false;
-	int top_node;
-	int bottom_node;
-	double num_open_sites = 0;
+	private boolean[][] n_square;
+	private int n;	
+	private WeightedQuickUnionUF wquf;
+	private final boolean OPEN = true;
+	private final boolean CLOSE = false;
+	private int top_node;
+	private int bottom_node;
+	private int num_open_sites = 0;
 	
 	public Percolation(int n) {
 		this.n = n;
@@ -28,7 +23,7 @@ public class Percolation {
 		initNSquare();
 	}  // create n-by-n grid, with all sites blocked
 	
-	public double getNumOpenSites() {
+	public int numberOfOpenSites() {
 		return num_open_sites;
 	}
 	
