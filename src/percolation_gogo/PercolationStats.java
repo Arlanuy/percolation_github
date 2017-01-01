@@ -1,14 +1,13 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
-import edu.princeton.cs.algs4.StdOut;
 
-public class   PercolationStats{
-	int n;
-	int trials;
-	double mean, s_dev;
-	double[] a;
+public class PercolationStats{
+	private int n;
+	private int trials;
+	private double mean, s_dev;
+	private double[] a;
 	
-	Percolation p;
+	private Percolation p;
 	
 	public PercolationStats(int n, int trials)    // perform trials independent experiments on an n-by-n grid
 	{
@@ -16,23 +15,15 @@ public class   PercolationStats{
 		this.trials = trials;
 		p = new Percolation(n);
 		StdRandom.setSeed(4);
-		StdOut.println("The seed is " + StdRandom.getSeed());
-	   StdOut.println("mean is " + mean());
-	   StdOut.println("stddev is " + stddev());
-	   StdOut.println("confidence lo is " + confidenceLo());
-	   StdOut.println("confidence hi is " + confidenceHi());
 	}
 	
 	private double percTresh() {
 		while (!p.percolates()) {
 			int random_num = StdRandom.uniform(n) + 1; //+ 1 because this could return zero
 			int random_num2 = StdRandom.uniform(n) + 1;
-			//StdOut.println(" and the rd is " + random_num + " " + random_num2);
 			p.open(random_num, random_num2);
-			//PercolationVisualizer.draw(p, n);
 		}
-		StdOut.println("Num of opened sites is " + p.getNumOpenSites());
-		double open_sites = p.getNumOpenSites();
+		double open_sites = p.numberOfOpenSites();
 		p = new Percolation(n);
 		return open_sites;
 	}
@@ -44,7 +35,6 @@ public class   PercolationStats{
 			a[i] = percTresh()/(n*n);
 		}
 		mean = StdStats.mean(a);
-		StdOut.println("mean is " + mean);
 		return mean;
 		
 	}
