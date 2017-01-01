@@ -11,7 +11,7 @@ public class PercolationStats{
 	
 	public PercolationStats(int n, int trials)    // perform trials independent experiments on an n-by-n grid
 	{
-		this.n = n;
+		this.n = n		;
 		this.trials = trials;
 		p = new Percolation(n);
 		StdRandom.setSeed(4);
