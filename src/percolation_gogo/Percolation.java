@@ -1,5 +1,4 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-import edu.princeton.cs.algs4.StdOut;
 
 public class Percolation {
 	private boolean[][] n_square;
@@ -19,7 +18,6 @@ public class Percolation {
 		wquf = new WeightedQuickUnionUF((n * n) + 2);
 		num_open_sites = 0;
 		initNSquare();
-		StdOut.println("is this full " + isFull(1, 1));
 	}  // create n-by-n grid, with all sites blocked
 	
 	public int numberOfOpenSites() {

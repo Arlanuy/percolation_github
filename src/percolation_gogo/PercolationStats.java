@@ -1,6 +1,5 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
-import edu.princeton.cs.algs4.StdOut;
 public class PercolationStats{
 	private int n;
 	private int trials;
@@ -23,7 +22,6 @@ public class PercolationStats{
 			//StdRandom.setSeed(4);
 		}
 		when_seed++;
-		StdOut.println("Mean is " + mean());
 	}
 	
 	private double percTresh() {
@@ -33,8 +31,6 @@ public class PercolationStats{
 			p.open(random_num, random_num2);
 		}
 		double open_sites = p.numberOfOpenSites();
-		StdOut.println("Num of open sites are " + open_sites);
-
 
 		return open_sites;
 	}
@@ -79,7 +75,6 @@ public class PercolationStats{
    {
 	   int N = Integer.parseInt(args[0]);
 	   int T = Integer.parseInt(args[1]);
-	   StdOut.println("Lets dance");
 	   if (N <= 0 || T <= 0) {
 		   throw new IllegalArgumentException();
 	   }
