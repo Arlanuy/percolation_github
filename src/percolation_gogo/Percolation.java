@@ -4,13 +4,16 @@ public class Percolation {
 	private boolean[][] n_square;
 	private int n;	
 	private WeightedQuickUnionUF wquf;
-	private final boolean OPEN = true;
-	private final boolean CLOSE = false;
+	private static final boolean OPEN = true;
+	private static final boolean CLOSE = false;
 	private int top_node;
 	private int bottom_node;
 	private int num_open_sites = 0;
 	
 	public Percolation(int n) {
+		if (n <= 0) {
+			throw new IllegalArgumentException();
+		}
 		this.n = n;
 		top_node = (n * n);
 		bottom_node = (n * n) + 1;
@@ -96,16 +99,10 @@ public class Percolation {
 	
 	public boolean isFull(int row, int col){
 		return n_square[row - 1][col - 1];
-	}  // is site (row, col) open?
+	}  // is site (row, col) full?
  
 	public boolean isOpen(int row, int col) {
-		if (n_square[row - 1][col - 1] == OPEN) {
-			return false;
-		}
-		
-		else {
-			return true;
-		}
+		return n_square[row - 1][col - 1];
 	} // is site (row, col) full?
 	   
 	public boolean percolates() {

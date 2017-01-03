@@ -17,11 +17,6 @@ public class PercolationStats{
 		this.n = n;
 		this.trials = trials;
 		p = new Percolation(n);
-		StdRandom.setSeed(4);
-		if (when_seed % 4 == 0) {
-			//StdRandom.setSeed(4);
-		}
-		when_seed++;
 	}
 	
 	private double percTresh() {
@@ -39,6 +34,7 @@ public class PercolationStats{
 	{
 		a = new double[trials];
 		for (int i = 0; i < trials; i++) {
+			StdRandom.setSeed(i+1);
 			a[i] = percTresh()/(n*n);
 			if (i != (trials - 1)) {
 				p = new Percolation(n);
@@ -70,7 +66,7 @@ public class PercolationStats{
 		double C_interval = mean + M_error;
 		return C_interval;
 	}
-	
+/**	
    public static void main(String[] args)        // test client (described below)
    {
 	   int N = Integer.parseInt(args[0]);
@@ -79,5 +75,5 @@ public class PercolationStats{
 		   throw new IllegalArgumentException();
 	   }
 	   PercolationStats ps = new PercolationStats(N, T);
-   }
+   } */
 }
