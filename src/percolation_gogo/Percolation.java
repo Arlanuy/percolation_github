@@ -1,5 +1,5 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
-
+import edu.princeton.cs.algs4.StdOut;
 
 public class Percolation {
 	private boolean[][] n_square;
@@ -13,14 +13,13 @@ public class Percolation {
 	
 	public Percolation(int n) {
 		this.n = n;
-		if (n <= 0) {
-			throw new IllegalArgumentException();
-		}
 		top_node = (n * n);
 		bottom_node = (n * n) + 1;
 		n_square = new boolean[n][n];
 		wquf = new WeightedQuickUnionUF((n * n) + 2);
+		num_open_sites = 0;
 		initNSquare();
+		StdOut.println("is this full " + isFull(1, 1));
 	}  // create n-by-n grid, with all sites blocked
 	
 	public int numberOfOpenSites() {
@@ -59,6 +58,7 @@ public class Percolation {
 			row--;
 			col--;
 			n_square[row][col] = OPEN;
+			num_open_sites++;
 			if (row == 0) {
 				wquf.union(xyTo1D(row, col), top_node);
 				num_open_sites++;
@@ -68,35 +68,39 @@ public class Percolation {
 			(wquf.connected(xyTo1D(row, col), xyTo1D((row - 1), col)) == false)) {
 				wquf.union(xyTo1D(row, col), xyTo1D(row - 1, col));
 				num_open_sites++;
+				n_square[row-1][col] = OPEN;
 			}
 			
 			else if (((row + 1) < n) && (n_square[row+1][col] == OPEN) &&
 				(wquf.connected(xyTo1D(row, col), xyTo1D((row + 1), col)) == false)) {
 					wquf.union(xyTo1D(row,col), xyTo1D(row + 1, col));
 					num_open_sites++;
+					n_square[row+1][col] = OPEN;
 			}
 			
 			if (((col - 1) >= 0) && (n_square[row][col - 1] == OPEN) &&
 				(wquf.connected(xyTo1D(row, col), xyTo1D(row, col - 1)) == false)) {
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col - 1));
 					num_open_sites++;
+					n_square[row][col-1] = OPEN;
 			}
 				
 			else if (((col + 1) < n) && (n_square[row][col + 1] == OPEN) &&
 				(wquf.connected(xyTo1D(row, col), xyTo1D(row, col + 1)) == false)) {
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col + 1));
 					num_open_sites++;
+					n_square[row][col+1] = OPEN;
 			}
 		}
 	
 	}       // open site (row, col) if it is not open already 
 	
 	
-	public boolean isOpen(int row, int col){
+	public boolean isFull(int row, int col){
 		return n_square[row - 1][col - 1];
 	}  // is site (row, col) open?
  
-	public boolean isFull(int row, int col) {
+	public boolean isOpen(int row, int col) {
 		if (n_square[row - 1][col - 1] == OPEN) {
 			return false;
 		}

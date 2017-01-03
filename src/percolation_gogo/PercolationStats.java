@@ -1,20 +1,29 @@
 import edu.princeton.cs.algs4.StdRandom;
 import edu.princeton.cs.algs4.StdStats;
-
+import edu.princeton.cs.algs4.StdOut;
 public class PercolationStats{
 	private int n;
 	private int trials;
 	private double mean, s_dev;
 	private double[] a;
+	private static int when_seed = 4;
 	
 	private Percolation p;
 	
 	public PercolationStats(int n, int trials)    // perform trials independent experiments on an n-by-n grid
 	{
-		this.n = n		;
+		if (n <= 0 || trials <= 0) {
+			throw new IllegalArgumentException();
+		}
+		this.n = n;
 		this.trials = trials;
 		p = new Percolation(n);
 		StdRandom.setSeed(4);
+		if (when_seed % 4 == 0) {
+			//StdRandom.setSeed(4);
+		}
+		when_seed++;
+		StdOut.println("Mean is " + mean());
 	}
 	
 	private double percTresh() {
@@ -24,7 +33,9 @@ public class PercolationStats{
 			p.open(random_num, random_num2);
 		}
 		double open_sites = p.numberOfOpenSites();
-		p = new Percolation(n);
+		StdOut.println("Num of open sites are " + open_sites);
+
+
 		return open_sites;
 	}
 	
@@ -33,6 +44,9 @@ public class PercolationStats{
 		a = new double[trials];
 		for (int i = 0; i < trials; i++) {
 			a[i] = percTresh()/(n*n);
+			if (i != (trials - 1)) {
+				p = new Percolation(n);
+			}
 		}
 		mean = StdStats.mean(a);
 		return mean;
@@ -65,6 +79,7 @@ public class PercolationStats{
    {
 	   int N = Integer.parseInt(args[0]);
 	   int T = Integer.parseInt(args[1]);
+	   StdOut.println("Lets dance");
 	   if (N <= 0 || T <= 0) {
 		   throw new IllegalArgumentException();
 	   }
