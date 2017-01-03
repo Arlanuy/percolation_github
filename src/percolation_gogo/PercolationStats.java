@@ -66,7 +66,7 @@ public class PercolationStats{
 		double C_interval = mean + M_error;
 		return C_interval;
 	}
-/**	
+
    public static void main(String[] args)        // test client (described below)
    {
 	   int N = Integer.parseInt(args[0]);
@@ -75,5 +75,5 @@ public class PercolationStats{
 		   throw new IllegalArgumentException();
 	   }
 	   PercolationStats ps = new PercolationStats(N, T);
-   } */
+   } 
 }
