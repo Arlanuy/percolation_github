@@ -43,7 +43,6 @@ public class Percolation {
 			return false;
 		}
 		return true;
-
 	}
 	
 	private int xyTo1D(int row, int col) {
@@ -59,9 +58,13 @@ public class Percolation {
 			row--;
 			col--;
 			n_square[row][col] = OPEN;
-			num_open_sites++;
+
 			if (row == 0) {
 				wquf.union(xyTo1D(row, col), top_node);
+				num_open_sites++;
+			}
+			
+			else{
 				num_open_sites++;
 			}
 			
@@ -98,7 +101,7 @@ public class Percolation {
 	
 	
 	public boolean isFull(int row, int col){
-		return n_square[row - 1][col - 1];
+		return !n_square[row - 1][col - 1];
 	}  // is site (row, col) full?
  
 	public boolean isOpen(int row, int col) {
