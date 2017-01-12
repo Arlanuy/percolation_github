@@ -101,12 +101,12 @@ public class Percolation {
 	
 	
 	public boolean isFull(int row, int col){
-		return !n_square[row - 1][col - 1];
+		return (!n_square[row - 1][col - 1]);
 	}  // is site (row, col) full?
  
 	public boolean isOpen(int row, int col) {
 		return n_square[row - 1][col - 1];
-	} // is site (row, col) full?
+	} // is site (row, col) open?
 	   
 	public boolean percolates() {
 		//int random_start_column = 1;
