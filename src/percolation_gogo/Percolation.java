@@ -1,7 +1,6 @@
 import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
-	private boolean[][] n_square_full;
 	private boolean[][] n_square_open;
 	private int n;	
 	private WeightedQuickUnionUF wquf;
@@ -18,7 +17,6 @@ public class Percolation {
 		this.n = n;
 		top_node = (n * n);
 		bottom_node = (n * n) + 1;
-		n_square_full = new boolean[n][n];
 		n_square_open = new boolean[n][n];
 		wquf = new WeightedQuickUnionUF((n * n) + 2);
 		num_open_sites = 0;
@@ -66,38 +64,37 @@ public class Percolation {
 			n_square_open[row][col] = true;
 			num_open_sites++;
 			
-			if  (row == 0) {
-				n_square_full[row][col] = true;
-			}
 
 			
 			if (((row - 1) >= 0) && (n_square_open[row - 1][col] == true)) {
 				if (wquf.connected(xyTo1D(row, col), xyTo1D((row - 1), col)) == false) {
-					wquf.union(xyTo1D(row, col), xyTo1D(row - 1, col));
-				}
-				if (wquf.connected(xyTo1D(row - 1, col), top_node) == true) {
-					n_square_full[row - 1][col] = true;
-				}
-			
+					if (row == (n-1))  {
+						if (wquf.connected(xyTo1D(row - 1, col), top_node) == true){
+							wquf.union(xyTo1D(row, col), xyTo1D(row - 1, col));
+						}						
+						
+					}
+					
+					else {
+						wquf.union(xyTo1D(row, col), xyTo1D(row - 1, col));
+					}
+
+				}	
 			}
 			
 			if (((row + 1) < n) && (n_square_open[row + 1][col] == true)) {
 				if (wquf.connected(xyTo1D(row, col), xyTo1D((row + 1), col)) == false) {
 					wquf.union(xyTo1D(row,col), xyTo1D(row + 1, col));
 				}
-				if (wquf.connected(xyTo1D(row + 1, col), top_node) == true) {
-					n_square_full[row + 1][col] = true;
-				}
-				
 			}
 			
 			if (((col - 1) >= 0) && (n_square_open[row][col - 1] == true)) {
 				if (wquf.connected(xyTo1D(row, col), xyTo1D(row, col - 1)) == false){
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col - 1));
 				}
-				
-				if (wquf.connected(xyTo1D(row, col - 1), top_node) == true) {
-					n_square_full[row][col - 1] = true;
+				else if (row == (n-1)) {
+					wquf.union(xyTo1D(row, col), xyTo1D(row, col - 1));
+					
 				}
 			}
 				
@@ -106,23 +103,52 @@ public class Percolation {
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col + 1));
 				}
 				
-				if (wquf.connected(xyTo1D(row, col + 1), top_node) == true) {
-					n_square_full[row][col + 1] = true;
+				else if (row == (n-1)) {
+					wquf.union(xyTo1D(row, col), xyTo1D(row, col + 1));
+					
 				}
 			}
 			
-			
-			if (wquf.connected(xyTo1D(row, col), top_node) == true) {
-				wquf.union(xyTo1D(row, col), top_node);
-				n_square_full[row][col] = true;
-			}
 		}
 	
 	}       // open site (row, col) if it is not open already 
 	
 	
 	public boolean isFull(int row, int col){
-		return (n_square_full[row - 1][col - 1]);
+		if (row == 1){
+			if (n_square_open[row - 1][col - 1]) {
+				return true;
+			}
+			
+			else {
+				return false;
+			}
+		}
+		
+		else if (row == n) {
+			if (n_square_open[row - 1][col - 1]) {
+				if (wquf.connected(xyTo1D(row - 1, col-1), top_node)
+					&& (wquf.find(xyTo1D(row- 1, col - 1)) != bottom_node)) {
+					return true;
+				}
+				
+				else {
+					return false;
+				}
+			}
+			
+			else {
+				return false;
+			}
+		}
+		
+		else if  (n_square_open[row - 1][col - 1]){
+			return wquf.connected(xyTo1D(row - 1, col - 1), top_node);
+		}
+		
+		else {
+			return false;
+		}
 	}  // is site (row, col) full?
  
 	public boolean isOpen(int row, int col) {
