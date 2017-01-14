@@ -2,6 +2,8 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 	private boolean[][] n_square_open;
+	private boolean[] row_adj_bottom;
+	private int[] int_arr_adj_bottom;
 	private int n;	
 	private WeightedQuickUnionUF wquf;
 	private boolean is_full = false;
@@ -9,6 +11,7 @@ public class Percolation {
 	private int top_node;
 	private int bottom_node;
 	private int num_open_sites = 0;
+	
 	
 	public Percolation(int n) {
 		if (n <= 0) {
@@ -18,7 +21,9 @@ public class Percolation {
 		top_node = (n * n);
 		bottom_node = (n * n) + 1;
 		n_square_open = new boolean[n][n];
-		wquf = new WeightedQuickUnionUF((n * n) + 2);
+		row_adj_bottom = new boolean[n];
+		int_arr_adj_bottom = new int[n];
+		wquf = new WeightedQuickUnionUF((n * n) + 2 + n);
 		num_open_sites = 0;
 		initNSquare();
 	}  // create n-by-n grid, with all sites blocked
@@ -39,6 +44,12 @@ public class Percolation {
 				}
 				
 			}
+		}
+		
+		int m = 0;
+		for (int k = (n*n) + 2; k <  (n*n) + 2 + n; k++) {
+			int_arr_adj_bottom[m] = k;
+			m++;
 		}
 	}
 	
@@ -64,7 +75,25 @@ public class Percolation {
 			n_square_open[row][col] = true;
 			num_open_sites++;
 			
-
+			if (row == (n-2)) {
+				if (n_square_open[row + 1][col]) {
+					wquf.union(int_arr_adj_bottom[col], xyTo1D(row, col));
+				}
+			}
+			
+			else if (row == (n-1)) {
+				if (n_square_open[row - 1][col]) {
+					wquf.union(int_arr_adj_bottom[col], xyTo1D(row - 1, col));
+				}
+				
+				if (((col - 1) >= 0) && n_square_open[row][col - 1]) {
+					wquf.union(int_arr_adj_bottom[col - 1], int_arr_adj_bottom[col]);
+				}
+				
+				if (((col + 1) < n) && n_square_open[row][col + 1]) {
+					wquf.union(int_arr_adj_bottom[col + 1], int_arr_adj_bottom[col]);
+				}
+			}
 			
 			if (((row - 1) >= 0) && (n_square_open[row - 1][col] == true)) {
 				if (wquf.connected(xyTo1D(row, col), xyTo1D((row - 1), col)) == false) {
@@ -126,20 +155,7 @@ public class Percolation {
 		}
 		
 		else if (row == n) {
-			if (n_square_open[row - 1][col - 1]) {
-				if (wquf.connected(xyTo1D(row - 1, col-1), top_node)
-					&& (wquf.find(xyTo1D(row- 1, col - 1)) != bottom_node)) {
-					return true;
-				}
-				
-				else {
-					return false;
-				}
-			}
-			
-			else {
-				return false;
-			}
+			return wquf.connected(int_arr_adj_bottom[col - 1], top_node);
 		}
 		
 		else if  (n_square_open[row - 1][col - 1]){
