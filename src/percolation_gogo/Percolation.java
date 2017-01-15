@@ -2,16 +2,13 @@ import edu.princeton.cs.algs4.WeightedQuickUnionUF;
 
 public class Percolation {
 	private boolean[][] n_square_open;
-	private boolean[] row_adj_bottom;
-	private int[] int_arr_adj_bottom;
 	private int n;	
 	private WeightedQuickUnionUF wquf;
-	private boolean is_full = false;
-	private boolean is_open = false;
 	private int top_node;
+	private int mirror_top_node;
 	private int bottom_node;
 	private int num_open_sites = 0;
-	
+	private int[][] mirror_int_n_square;
 	
 	public Percolation(int n) {
 		if (n <= 0) {
@@ -20,10 +17,10 @@ public class Percolation {
 		this.n = n;
 		top_node = (n * n);
 		bottom_node = (n * n) + 1;
+		mirror_top_node = (n * n * 2) + 2;
 		n_square_open = new boolean[n][n];
-		row_adj_bottom = new boolean[n];
-		int_arr_adj_bottom = new int[n];
-		wquf = new WeightedQuickUnionUF((n * n) + 2 + n);
+		mirror_int_n_square = new int[n][n];
+		wquf = new WeightedQuickUnionUF((n * n * 2) + 3);
 		num_open_sites = 0;
 		initNSquare();
 	}  // create n-by-n grid, with all sites blocked
@@ -46,11 +43,17 @@ public class Percolation {
 			}
 		}
 		
-		int m = 0;
-		for (int k = (n*n) + 2; k <  (n*n) + 2 + n; k++) {
-			int_arr_adj_bottom[m] = k;
-			m++;
+		int k = (n*n) + 2;
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				if (i == 0) {
+					wquf.union(k, mirror_top_node);
+				}
+				mirror_int_n_square[i][j] = k;
+				k++;
+			}
 		}
+		mirror_top_node = k;
 	}
 	
 	private boolean checkValidIndex(int row, int col) {
@@ -75,37 +78,23 @@ public class Percolation {
 			n_square_open[row][col] = true;
 			num_open_sites++;
 			
-			if (row == (n-2)) {
-				if (n_square_open[row + 1][col]) {
-					wquf.union(int_arr_adj_bottom[col], xyTo1D(row, col));
-				}
-			}
-			
-			else if (row == (n-1)) {
-				if (n_square_open[row - 1][col]) {
-					wquf.union(int_arr_adj_bottom[col], xyTo1D(row - 1, col));
-				}
-				
-				if (((col - 1) >= 0) && n_square_open[row][col - 1]) {
-					wquf.union(int_arr_adj_bottom[col - 1], int_arr_adj_bottom[col]);
-				}
-				
-				if (((col + 1) < n) && n_square_open[row][col + 1]) {
-					wquf.union(int_arr_adj_bottom[col + 1], int_arr_adj_bottom[col]);
-				}
-			}
-			
 			if (((row - 1) >= 0) && (n_square_open[row - 1][col] == true)) {
 				if (wquf.connected(xyTo1D(row, col), xyTo1D((row - 1), col)) == false) {
 					if (row == (n-1))  {
 						if (wquf.connected(xyTo1D(row - 1, col), top_node) == true){
 							wquf.union(xyTo1D(row, col), xyTo1D(row - 1, col));
-						}						
+							wquf.union(mirror_int_n_square[row][col], mirror_int_n_square[row - 1][col]);
+						}
+						
+						else {
+							wquf.union(mirror_int_n_square[row][col], mirror_int_n_square[row - 1][col]);
+						}
 						
 					}
 					
 					else {
 						wquf.union(xyTo1D(row, col), xyTo1D(row - 1, col));
+						wquf.union(mirror_int_n_square[row][col], mirror_int_n_square[row - 1][col]);
 					}
 
 				}	
@@ -114,27 +103,35 @@ public class Percolation {
 			if (((row + 1) < n) && (n_square_open[row + 1][col] == true)) {
 				if (wquf.connected(xyTo1D(row, col), xyTo1D((row + 1), col)) == false) {
 					wquf.union(xyTo1D(row,col), xyTo1D(row + 1, col));
+					wquf.union(mirror_int_n_square[row][col], mirror_int_n_square[row + 1][col]);
+				}
+				
+				else {
+					wquf.union(mirror_int_n_square[row][col], mirror_int_n_square[row + 1][col]);
 				}
 			}
 			
 			if (((col - 1) >= 0) && (n_square_open[row][col - 1] == true)) {
 				if (wquf.connected(xyTo1D(row, col), xyTo1D(row, col - 1)) == false){
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col - 1));
+					wquf.union(mirror_int_n_square[row][col], mirror_int_n_square[row][col - 1]);
 				}
 				else if (row == (n-1)) {
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col - 1));
-					
+					wquf.union(mirror_int_n_square[row][col], mirror_int_n_square[row][col - 1]);
 				}
 			}
 				
 			if (((col + 1) < n) && (n_square_open[row][col + 1] == true)) {			
 				if (wquf.connected(xyTo1D(row, col), xyTo1D(row, col + 1)) == false) {
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col + 1));
+					wquf.union(mirror_int_n_square[row][col], mirror_int_n_square[row][col + 1]);
+					
 				}
 				
 				else if (row == (n-1)) {
 					wquf.union(xyTo1D(row, col), xyTo1D(row, col + 1));
-					
+					wquf.union(mirror_int_n_square[row][col], mirror_int_n_square[row][col + 1]);
 				}
 			}
 			
@@ -154,12 +151,8 @@ public class Percolation {
 			}
 		}
 		
-		else if (row == n) {
-			return wquf.connected(int_arr_adj_bottom[col - 1], top_node);
-		}
-		
-		else if  (n_square_open[row - 1][col - 1]){
-			return wquf.connected(xyTo1D(row - 1, col - 1), top_node);
+		else if (n_square_open[row - 1][col - 1]) {
+			return wquf.connected(mirror_int_n_square[row - 1][col - 1], mirror_top_node);
 		}
 		
 		else {
